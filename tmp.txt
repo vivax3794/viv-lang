@@ -1,0 +1,76 @@
+[READING RULES]
+New rule: word -> RegExMatch
+New rule: string -> RegExMatch
+New rule: number -> RegExMatch
+New rule: type_ -> OrderedChoice
+New rule: var -> RegExMatch
+Rule expression founded in cache.
+CrossRef usage: expression
+New rule: function_call -> Sequence
+Rule var founded in cache.
+New rule: expression -> OrderedChoice
+New rule: asginment -> Sequence
+Rule expression founded in cache.
+New rule: statement -> Sequence
+New rule: program -> OneOrMore
+[PARSING CODE]
+>> Matching rule program=OneOrMore at position 0 => * say {"Hel
+   >> Matching rule statement=Sequence in program at position 0 => * say {"Hel
+      >> Matching rule OrderedChoice in statement at position 0 => * say {"Hel
+         >> Matching rule asginment=Sequence in statement at position 0 => * say {"Hel
+            ?? Try match rule word=RegExMatch(\w+) in asginment at position 1 =>  *say {"Hell
+            ++ Match 'say' at 1 => ' *say* {"Hell'
+            ?? Try match rule StrMatch(<-) in asginment at position 5 =>  say *{"Hello Wo
+            -- No match '<-' at 5 => ' say *{"*Hello Wo'
+         <<- Not matched rule asginment=Sequence in asginment at position 0 => * say {"Hel
+         >> Matching rule expression=OrderedChoice in statement at position 0 => * say {"Hel
+            >> Matching rule type_=OrderedChoice in expression at position 0 => * say {"Hel
+               ?? Try match rule string=RegExMatch("(.*?)") in type_ at position 1 =>  *say {"Hell
+               -- NoMatch at 1
+               ?? Try match rule number=RegExMatch(\d+) in type_ at position 1 =>  *say {"Hell
+               -- NoMatch at 1
+            <<- Not matched rule type_=OrderedChoice in type_ at position 0 => * say {"Hel
+            >> Matching rule function_call=Sequence in expression at position 0 => * say {"Hel
+               ?? Try match rule var=RegExMatch(\w+) in function_call at position 1 =>  *say {"Hell
+               ++ Match 'say' at 1 => ' *say* {"Hell'
+               ?? Try match rule StrMatch({) in function_call at position 5 =>  say *{"Hello Wo
+               ++ Match '{' at 5 => ' say *{*"Hello Wo'
+               >> Matching rule expression=OrderedChoice in function_call at position 6 =>  say {*"Hello Wor
+                  >> Matching rule type_=OrderedChoice in expression at position 6 =>  say {*"Hello Wor
+                     ?? Try match rule string=RegExMatch("(.*?)") in type_ at position 6 =>  say {*"Hello Wor
+                     ++ Match '"Hello World!"' at 6 => ' say {*"Hello World!"*'
+                  <<+ Matched rule type_=OrderedChoice in type_ at position 20 => lo World!"*}; 
+               <<+ Matched rule expression=OrderedChoice in expression at position 20 => lo World!"*}; 
+               ?? Try match rule StrMatch(}) in function_call at position 20 => lo World!"*}; 
+               ++ Match '}' at 20 => 'lo World!"*}*; '
+            <<+ Matched rule function_call=Sequence in function_call at position 21 => o World!"}*; 
+         <<+ Matched rule expression=OrderedChoice in expression at position 21 => o World!"}*; 
+      <<+ Matched rule OrderedChoice in statement at position 21 => o World!"}*; 
+      ?? Try match rule StrMatch(;) in statement at position 21 => o World!"}*; 
+      ++ Match ';' at 21 => 'o World!"}*;* '
+   <<+ Matched rule statement=Sequence in statement at position 22 =>  World!"};* 
+   >> Matching rule statement=Sequence in program at position 22 =>  World!"};* 
+      >> Matching rule OrderedChoice in statement at position 22 =>  World!"};* 
+         >> Matching rule asginment=Sequence in statement at position 22 =>  World!"};* 
+            ?? Try match rule word=RegExMatch(\w+) in asginment at position 23 => World!"}; *
+            -- NoMatch at 23
+         <<- Not matched rule asginment=Sequence in asginment at position 22 =>  World!"};* 
+         >> Matching rule expression=OrderedChoice in statement at position 22 =>  World!"};* 
+            >> Matching rule type_=OrderedChoice in expression at position 22 =>  World!"};* 
+               ?? Try match rule string=RegExMatch("(.*?)") in type_ at position 23 => World!"}; *
+               -- NoMatch at 23
+               ?? Try match rule number=RegExMatch(\d+) in type_ at position 23 => World!"}; *
+               -- NoMatch at 23
+            <<- Not matched rule type_=OrderedChoice in type_ at position 22 =>  World!"};* 
+            >> Matching rule function_call=Sequence in expression at position 22 =>  World!"};* 
+               ?? Try match rule var=RegExMatch(\w+) in function_call at position 23 => World!"}; *
+               -- NoMatch at 23
+            <<- Not matched rule function_call=Sequence in function_call at position 22 =>  World!"};* 
+            ?? Try match rule var=RegExMatch(\w+) in expression at position 23 => World!"}; *
+            -- NoMatch at 23
+         <<- Not matched rule expression=OrderedChoice in expression at position 22 =>  World!"};* 
+      <<- Not matched rule OrderedChoice in statement at position 22 =>  World!"};* 
+   <<- Not matched rule statement=Sequence in statement at position 22 =>  World!"};* 
+<<+ Matched rule program=OneOrMore in program at position 22 =>  World!"};* 
+[RUNNING CODE]
+"Hello World!"
